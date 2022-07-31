@@ -73,7 +73,7 @@
 
         let nombre = document.getElementById('nombre').value;
         let id = document.getElementById('id').value;
-        id =  Math.round(Math.random()*100)
+        id =  Math.round(Math.random()*100);
         const data = await store(nombre, id);
         if (data.status == 200) {
           alert(data.nombre + ' ' + data.msg)

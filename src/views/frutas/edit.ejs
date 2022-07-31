@@ -77,7 +77,7 @@
         const data = await update(id,nombre);
         if (data.status == 201) {
           alert(`El producto ${data.actualizado[0].nombre} fue editado correctamente`);
-          window.location.href = '/';
+          window.location.href = '/frutas';
         } else {
           alert(data.error[0].msg)
         }

@@ -51,7 +51,7 @@
             <div class="col-md-12 py-4">
               <label for="nombre" class="form-label">Nombre</label>
               <input type="text" class="form-control" value="<%= elemento.nombre %>" readonly>
-              <input  name="id" id="id" value="<%= elemento.id %>">
+              <input  name="id" type="number" id="id" value="<%= elemento.id %>">
             </div>
             <div class="col-12">
               <a href="/frutas/edit/<%= elemento.id %>" class="btn btn-primary">Editar</a>
@@ -71,7 +71,6 @@
         let id = document.getElementById('id').value;
 
         const data = await destroy(id);
-        console.log(data);
         if (data.status == 200) {
           alert(data.eliminado[0].nombre + ' eliminado correctamente')
           window.location.href = '/frutas';

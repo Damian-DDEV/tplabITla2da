@@ -39,59 +39,89 @@ let frutas = [
     
 ]
 
-const index = async (req,res) => {
-    return await res.render('../src/views/frutas/index', { frutas });
-};
-
-const show = async (req,res) => {
-
-    //TODO: ME DEVUELVE UNDEFINED EL EXISTE FRUTA, Y CUADO BORRO UN ELEMENTO DEL ARRAY ME PASA EL SIGUIENTE 
-    console.log('EL PARAM',req.params.id)
-    const id = req.params.id
-    let existeFruta = frutas.find(element => element.id === id);
-    console.log('EXISTE FRUTA',existeFruta)
-    const elemento = frutas[id]
-    console.log('EL ELEMENTO',elemento)
-    return await res.render('../src/views/frutas/show', {elemento});
-};
-
-const edit = async (req,res) => {
-    const id = req.params.id
-    const elemento = frutas[id]
-    
-    return await res.render('../src/views/frutas/edit', {elemento});
-};
-
-const create = async (req,res) => {
-    return await res.render('../src/views/frutas/create');
-};
-
-
-const store = async (req,res) => {
-    const {nombre,id} = req.body;
-    if (nombre) {
-        frutas.unshift({id,nombre})
-        return res.status(200).json({'status':200, id, nombre, 'msg':'creado correctamente'})
-    } else {
-        return res.status(404).json({'msg':'No se recibieron los datos'})
+const index = async (req, res, next) => {
+    try {
+        return await res.render('../src/views/frutas/index', { frutas });
+    } catch (error) {
+        return next(error);
     }
 };
 
-const update = async (req,res) => {
-    const {nombre} = req.body;
-    const id = req.params.id;
-    if (id) {
-        const actualizado = frutas.splice(id,1,{'id':id,'nombre':nombre})
-        return res.status(201).json({'status':201, actualizado, 'msg':'Fruta editada correctamente'})
-    } else {
-        return res.status(404).json({'msg':'No se recibieron los datos'})
+const show = async (req, res, next) => {
+    try {
+        let idParam = req.params.id;
+        let Idparseado = parseInt(idParam);
+        let existeFruta = frutas.findIndex(i => i.id === Idparseado)
+        let elemento = frutas[existeFruta]
+        return await res.render('../src/views/frutas/show', { elemento });
+    } catch (error) {
+        return next(error);
     }
 };
 
-const destroy = async (req,res) => {
-    const id = req.params.id;
-    eliminado = frutas.splice(id,1)
-    return res.status(200).json({'status':200,eliminado, 'msg':'Fruta eliminada correctamente'})
+const edit = async (req, res, next) => {
+    try {
+        let idParam = req.params.id;
+        let Idparseado = parseInt(idParam);
+        let existeFruta = frutas.findIndex(i => i.id === Idparseado)
+        let elemento = frutas[existeFruta]
+        return await res.render('../src/views/frutas/edit', { elemento });
+    } catch (error) {
+        return next(error);
+    }
+};
+
+const create = async (req, res, next) => {
+    try {
+        return await res.render('../src/views/frutas/create');
+    } catch (error) {
+        return next(error);
+    }
+};
+
+
+const store = async (req, res, next) => {
+
+    try {
+        const {nombre,id} = req.body;
+
+        if (nombre) {
+            frutas.unshift({id,nombre})
+            return res.status(200).json({ 'status':200, id, nombre, 'msg':'fruta creada correctamente' });
+        } else {
+            return res.status(404).json({ 'msg':'No se recibieron los datos' });
+        }
+        
+    } catch (error) {
+        return next(error);
+    }
+
+};
+
+const update = async (req, res, next) => {
+    try {
+        const {nombre} = req.body;
+        let idParam = req.params.id;
+        let Idparseado = parseInt(idParam);
+        let existeFruta = frutas.findIndex(i => i.id === Idparseado)
+        const actualizado = frutas.splice(existeFruta,1,{ 'id':existeFruta,'nombre':nombre });
+        return res.status(201).json({'status':201, actualizado, 'msg':'fruta editada correctamente'});
+
+    } catch (error) {
+        return next(error);
+    }
+};
+
+const destroy = async (req, res, next) => {
+    try {
+        let idParam = req.params.id;
+        let idParseado = parseInt(idParam);
+        let existeFruta = frutas.findIndex(i => i.id === idParseado)
+        let eliminado = frutas.splice(existeFruta,1);
+        return res.status(200).json({ 'status':200,eliminado, 'msg':'fruta eliminada correctamente' });
+    } catch (error) {
+        return next(error);
+    }
 };
 
 module.exports = {

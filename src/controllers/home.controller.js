@@ -1,7 +1,10 @@
 const homeController = {
-    get: async (req, res) => {
-
-        return res.render('../views/home/index')
+    get: async (req, res, next) => {
+        try {
+            return res.render('../views/home/index')
+        } catch (error) {
+            return next(error)
+        }
     }
 }
 

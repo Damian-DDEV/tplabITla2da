@@ -51,6 +51,8 @@
             <div class="col-md-12 py-4">
               <label for="nombre" class="form-label">Nombre</label>
               <input type="text" class="form-control" name="nombre" id="nombre" value="" required>
+              <label for="id" hidden class="form-label">id</label>
+              <input type="number" hidden class="form-control" name="id" id="id" value="" required>
             </div>
             <div class="col-12">
               <button class="btn btn-primary" type="submit" id="boton">Enviar</button>
@@ -70,23 +72,25 @@
         e.preventDefault();
 
         let nombre = document.getElementById('nombre').value;
-
-        const data = await store(nombre);
-        console.log(data);
+        let id = document.getElementById('id').value;
+        id =  Math.round(Math.random()*100);
+        console.log(id)
+        const data = await store(nombre, id);
         if (data.status == 200) {
           alert(data.nombre + ' ' + data.msg)
-          window.location.href = '/';
+          window.location.href = '/usuarios';
         } else {
           alert(data.error[0].msg)
         }
       })
 
-      const store = async (nombre) => {
+      const store = async (nombre, id) => {
         try {
           const request = await fetch('http://localhost:3000/usuarios/store',{
             method:"POST",
             body: JSON.stringify({
-              nombre
+              nombre,
+              id
             }),
             headers : {
               "Content-Type": "application/json",
